@@ -29,8 +29,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
 function isAuthEndpoint(url: string): boolean {
   return url.includes('/auth/login') ||
-         url.includes('/auth/refresh-token') ||
-         url.includes('/auth/register');
+    url.includes('/auth/login/google') ||
+    url.includes('/auth/register') ||
+    url.includes('/auth/refresh-token') ||
+    url.includes('/auth/logout');
 }
 
 function handle401(
@@ -46,7 +48,7 @@ function handle401(
       switchMap((response) => {
         if (!response.data) {
           isRefreshing = false;
-          authService.logout();
+          authService.forceLogout();
           return throwError(() => new Error('No se pudo refrescar la sesión'));
         }
 
@@ -63,7 +65,7 @@ function handle401(
       }),
       catchError((err) => {
         isRefreshing = false;
-        authService.logout();
+        authService.forceLogout();
         return throwError(() => err);
       })
     );

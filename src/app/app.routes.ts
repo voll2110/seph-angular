@@ -14,6 +14,11 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full'
+      },
+      {
         path: 'home',
         loadChildren: () =>
           import('./features/home/homeRoutes').then(m => m.homeRoutes)

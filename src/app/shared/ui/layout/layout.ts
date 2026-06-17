@@ -10,4 +10,8 @@ import { AuthService } from '../../../core/auth/authService';
 })
 export class LayoutComponent {
   authService = inject(AuthService);
+
+  logout(): void {
+    this.authService.logout();
+  }
 }
