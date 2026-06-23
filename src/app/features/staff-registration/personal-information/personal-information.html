@@ -1,0 +1,61 @@
+<form class="form-card">
+    <h2>Datos Personales</h2>
+
+  <div class="form-content">
+
+    <div class="form-grid personal-grid">
+
+      <div class="field-card large">
+        <label>Nombres (s)</label>
+        <input
+          type="text"
+          name="strNombre"
+          [(ngModel)]="employee.strNombre"
+        />
+
+        <label>Apellido Materno</label>
+        <input
+          type="text"
+          name="strApellidoMat"
+          [(ngModel)]="employee.strApellidoMat"
+        />
+
+        <label>Apellido Paterno</label>
+        <input
+          type="text"
+          name="strApellidoPat"
+          [(ngModel)]="employee.strApellidoPat"
+        />
+      </div>
+
+      <div class="right-column">
+        <div class="field-card">
+          <label>CURP</label>
+          <input
+            type="text"
+            name="strCurp"
+            [(ngModel)]="employee.strCurp"
+          />
+        </div>
+
+        <div class="field-card">
+          <label>Sexo</label>
+        <select
+  name="idSexo"
+  [(ngModel)]="employee.idSexo"
+>
+  <option [ngValue]="0">Seleccione</option>
+
+  @for (sex of sexes; track sex.id) {
+    <option [ngValue]="sex.id">
+      {{ sex.strValor }}
+    </option>
+  }
+</select>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</form>

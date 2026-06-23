@@ -1,0 +1,144 @@
+<div class="page">
+
+  <aside
+    class="sidebar"
+    [class.sidebar-collapsed]="menuCollapsed">
+
+    <button
+      class="hamburger"
+      type="button"
+      (click)="toggleMenu()">
+      ☰
+    </button>
+
+    <div
+      class="sidebar-title"
+      *ngIf="!menuCollapsed">
+
+      Registro de <br />
+      Personal de la DGES
+
+    </div>
+
+    <nav
+      class="menu"
+      *ngIf="!menuCollapsed">
+
+      <a
+        class="menu-item"
+        routerLink="/home">
+        Inicio
+      </a>
+
+      <a
+        class="menu-item"
+        [class.active]="currentStep === 1"
+        [class.completed]="currentStep === 2"
+        (click)="goToStep(1)">
+
+        Registro Personal
+
+      </a>
+
+      <a
+        class="menu-item"
+        [class.active]="currentStep === 2"
+        [class.disabled]="!personalInformationCompleted"
+        (click)="goToStep(2)">
+
+        Historial de Contrato
+
+      </a>
+
+    </nav>
+
+  </aside>
+
+  <main
+    class="content"
+    [class.content-expanded]="menuCollapsed">
+
+    <section class="form-wrapper">
+
+      <div class="top-actions">
+
+        <button
+          class="btn-nav"
+          type="button"
+          (click)="previousStep()">
+
+          Atrás
+
+        </button>
+
+        <div class="steps">
+
+          <div
+            class="step"
+            [class.active]="currentStep === 1"
+            [class.completed]="currentStep === 2">
+
+            <span>
+              {{ currentStep === 2 ? '✓' : '1' }}
+            </span>
+
+            <p>
+              Información Personal
+            </p>
+
+          </div>
+
+          <div
+            class="step-line"
+            [class.completed]="currentStep === 2">
+          </div>
+
+          <div
+            class="step"
+            [class.active]="currentStep === 2">
+
+            <span>2</span>
+
+            <p>
+              Historial de Contrato
+            </p>
+
+          </div>
+
+        </div>
+
+        <button
+          class="btn-nav"
+          type="button"
+          (click)="nextStep()"
+          *ngIf="currentStep === 1">
+
+          Siguiente
+
+        </button>
+
+        <button
+          class="btn-nav"
+          type="button"
+          (click)="saveContractHistory()"
+          *ngIf="currentStep === 2">
+
+          Guardar
+
+        </button>
+
+      </div>
+
+      <app-personal-information
+        *ngIf="currentStep === 1">
+      </app-personal-information>
+
+      <app-contract-history
+        *ngIf="currentStep === 2">
+      </app-contract-history>
+
+    </section>
+
+  </main>
+
+</div>

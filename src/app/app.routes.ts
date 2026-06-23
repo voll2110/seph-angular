@@ -22,6 +22,12 @@ export const routes: Routes = [
         path: 'home',
         loadChildren: () =>
           import('./features/home/homeRoutes').then(m => m.homeRoutes)
+      },
+      {
+        path: 'staff-registration',
+        loadChildren: () =>
+          import('./features/staff-registration/staffRegistrationRoutes')
+            .then(m => m.staffRegistrationRoutes)
       }
     ]
   },
