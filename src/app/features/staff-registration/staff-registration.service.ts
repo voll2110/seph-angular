@@ -13,6 +13,8 @@ from '../../shared/models/staff-registration/responses/employeeResponse';
 
 import { CreateHistorialContratoRequest }
 from '../../shared/models/staff-registration/requests/createHistorialContratoRequest';
+import { RegistroPersonalResponse }
+from '../../shared/models/staff-registration/responses/registroPersonalResponse';
 /*URL base del backend. * 
  * Se reutiliza para todas las peticiones del módulo. */
 const API_URL = 'https://localhost:7160/api/v1';
@@ -57,6 +59,16 @@ createHistorialContrato(
   return this.http.post<ApiResponse<any>>(
     `${API_URL}/HistorialContrato/create-historial-contrato`,
     request
+  );
+}
+
+/* Obtiene el concentrado de registros de personal
+  capturados por el usuario autenticado.
+  Endpoint: GET /empleado/get-registros
+  @returns Lista de registros (empleado + historial de contrato). */
+getRegistros() {
+  return this.http.get<ApiResponse<RegistroPersonalResponse[]>>(
+    `${API_URL}/empleado/get-registros`
   );
 }
 
