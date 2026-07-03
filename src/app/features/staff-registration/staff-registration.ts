@@ -1,6 +1,6 @@
-import { Component, ViewChild, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { PersonalInformationComponent } from './personal-information/personal-information';
 import { ContractHistoryComponent } from './contract-history/contract-history';
@@ -17,7 +17,7 @@ import { ContractHistoryComponent } from './contract-history/contract-history';
   templateUrl: './staff-registration.html',
   styleUrl: './staff-registration.scss'
 })
-export class StaffRegistrationComponent {
+export class StaffRegistrationComponent implements OnInit {
 
   @ViewChild(PersonalInformationComponent)
   personalInformationComponent?: PersonalInformationComponent;
@@ -26,6 +26,7 @@ export class StaffRegistrationComponent {
   contractHistoryComponent?: ContractHistoryComponent;
 
   private cdr = inject(ChangeDetectorRef);
+  private route = inject(ActivatedRoute);
 
   menuCollapsed = false;
   currentStep = 1;
@@ -35,6 +36,19 @@ export class StaffRegistrationComponent {
 
   notificationMessage = '';
   notificationType: 'success' | 'error' = 'success';
+
+  /* Permite retomar un registro incompleto desde el concentrado:
+  al llegar con ?empleado=ID se salta directo al paso 2
+  (Historial de Contrato) usando el empleado ya guardado. */
+  ngOnInit(): void {
+    const empleadoParam = this.route.snapshot.queryParamMap.get('empleado');
+
+    if (empleadoParam) {
+      this.employeeId = Number(empleadoParam);
+      this.personalInformationCompleted = true;
+      this.currentStep = 2;
+    }
+  }
 
   toggleMenu(): void {
     this.menuCollapsed = !this.menuCollapsed;

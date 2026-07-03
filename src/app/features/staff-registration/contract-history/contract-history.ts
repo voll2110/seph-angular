@@ -170,7 +170,9 @@ export class ContractHistoryComponent implements OnInit {
 
           setTimeout(() => {
             this.isSaving = false;
-           this.router.navigateByUrl('/home');
+            /* Al concluir el registro se regresa al concentrado
+            para que el usuario vea su registro recién capturado. */
+            this.router.navigateByUrl('/staff-registration');
           }, 2000);
         },
         error: (error) => {
