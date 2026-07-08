@@ -1,0 +1,241 @@
+<!-- Concentrado de Enlaces Académicos.
+Lista los usuarios con rol Admin registrados en el sistema. -->
+<div class="summary-page">
+
+  <!-- Encabezado: título del concentrado y acciones. -->
+  <div class="summary-header">
+
+    <div class="summary-title">
+      <h2>Enlaces Académicos</h2>
+      <p>Concentrado de los enlaces académicos registrados</p>
+    </div>
+
+    <div class="summary-actions">
+
+      <a
+        class="btn-secondary"
+        routerLink="/admin">
+        Inicio
+      </a>
+
+      <!-- Inicia el flujo de registro de un nuevo Enlace Académico. -->
+      <a
+        class="btn-primary"
+        routerLink="/admin/enlaces/nueva">
+        + Nuevo Enlace Académico
+      </a>
+
+    </div>
+
+  </div>
+
+  <!-- Aviso de error al cargar. -->
+  @if (notificationMessage()) {
+    <div
+      class="notification"
+      [class.success]="notificationType() === 'success'"
+      [class.error]="notificationType() === 'error'">
+
+      {{ notificationMessage() }}
+
+    </div>
+  }
+
+  <!-- Estado de carga. -->
+  @if (isLoading()) {
+    <p class="loading">
+      Cargando enlaces académicos...
+    </p>
+  }
+
+  <!-- Mensaje cuando aún no hay enlaces académicos registrados. -->
+  @if (!isLoading() && registros().length === 0) {
+    <div class="empty-state">
+      <p>Aún no hay enlaces académicos registrados.</p>
+    </div>
+  }
+
+  <!-- Tabla del concentrado. -->
+  @if (!isLoading() && registros().length > 0) {
+    <div class="table-card">
+
+      <table class="records-table">
+
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Institución</th>
+            <th>Correo institucional</th>
+            <th>RFC</th>
+            <th>Nivel académico</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (registro of registros(); track registro.id) {
+            <tr>
+
+              <td>{{ registro.fullName }}</td>
+
+              <td>{{ registro.strInstitucion }}</td>
+
+              <td>{{ registro.email }}</td>
+
+              <td>{{ registro.strRFC ?? '—' }}</td>
+
+              <td>{{ registro.strNivelAcademico ?? '—' }}</td>
+
+              <td>
+                <span
+                  class="badge"
+                  [class.badge-complete]="registro.isActive"
+                  [class.badge-incomplete]="!registro.isActive">
+
+                  {{ registro.isActive ? 'Activo' : 'Inactivo' }}
+
+                </span>
+              </td>
+
+              <td class="actions-cell">
+                <button
+                  type="button"
+                  class="btn-detalle"
+                  (click)="openDetalle(registro)">
+                  Detalle
+                </button>
+
+                <a
+                  class="btn-editar"
+                  [routerLink]="['/admin/enlaces', registro.id, 'editar']">
+                  Editar
+                </a>
+
+                @if (registro.isActive) {
+                  <button
+                    type="button"
+                    class="btn-desactivar"
+                    (click)="desactivar(registro)">
+                    Desactivar
+                  </button>
+                } @else {
+                  <button
+                    type="button"
+                    class="btn-reactivar"
+                    (click)="reactivar(registro)">
+                    Reactivar
+                  </button>
+                }
+              </td>
+
+            </tr>
+          }
+        </tbody>
+
+      </table>
+
+    </div>
+  }
+
+  <!-- Modal de Detalle: información completa del enlace seleccionado. -->
+  @if (selectedRegistro(); as registro) {
+    <div class="modal-overlay" (click)="closeDetalle()">
+
+      <div class="modal-card" (click)="$event.stopPropagation()">
+
+        <div class="modal-header">
+          <h3>Detalle del enlace académico</h3>
+
+          <button type="button" class="btn-close" (click)="closeDetalle()">
+            ✕
+          </button>
+        </div>
+
+        <div class="modal-body">
+
+          <div class="detail-row">
+            <span class="detail-label">Nombre</span>
+            <span class="detail-value">{{ registro.fullName }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Institución</span>
+            <span class="detail-value">{{ registro.strInstitucion }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Correo institucional</span>
+            <span class="detail-value">{{ registro.email }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">RFC</span>
+            <span class="detail-value">{{ registro.strRFC ?? '—' }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Nivel académico</span>
+            <span class="detail-value">{{ registro.strNivelAcademico ?? '—' }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Perfil académico</span>
+            <span class="detail-value">{{ nombresPerfiles(registro) }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">SNI/SNII</span>
+            <span class="detail-value">{{ registro.strSNII ?? '—' }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Estado</span>
+            <span class="detail-value">
+              <span
+                class="badge"
+                [class.badge-complete]="registro.isActive"
+                [class.badge-incomplete]="!registro.isActive">
+                {{ registro.isActive ? 'Activo' : 'Inactivo' }}
+              </span>
+            </span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Identificación oficial (INE)</span>
+            @if (!registro.strRutaIne) {
+              <span class="detail-value">—</span>
+            } @else if (detalleIneEsPdf()) {
+              @if (detalleIneUrl(); as url) {
+                <a [href]="url" target="_blank" rel="noopener noreferrer">Ver documento (PDF)</a>
+              } @else {
+                <span class="detail-value">Cargando…</span>
+              }
+            } @else {
+              @if (detalleIneUrl(); as url) {
+                <img [src]="url" class="detail-image" alt="INE" />
+              } @else {
+                <span class="detail-value">Cargando…</span>
+              }
+            }
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">Fotografía</span>
+            @if (!registro.strRutaFotografia) {
+              <span class="detail-value">—</span>
+            } @else if (detalleFotoUrl(); as url) {
+              <img [src]="url" class="detail-image" alt="Fotografía" />
+            } @else {
+              <span class="detail-value">Cargando…</span>
+            }
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  }
+
+</div>

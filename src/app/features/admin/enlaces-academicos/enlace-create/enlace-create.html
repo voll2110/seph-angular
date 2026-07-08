@@ -1,0 +1,133 @@
+<div class="create-page">
+  <div class="create-header">
+    <h2>{{ enlaceId ? 'Editar Enlace Académico' : 'Registrar Enlace Académico' }}</h2>
+    <a class="btn-secondary" routerLink="/admin/enlaces">Volver al concentrado</a>
+  </div>
+
+  @if (notificationMessage()) {
+    <div class="notification" [class.success]="notificationType() === 'success'" [class.error]="notificationType() === 'error'">
+      {{ notificationMessage() }}
+    </div>
+  }
+
+  @if (isLoading()) {
+    <p class="loading">Cargando información del enlace académico...</p>
+  } @else {
+
+  <form class="form-card" (ngSubmit)="registrar()">
+    <div class="form-grid">
+      <div class="field-card">
+        <label>Nombre(s) *</label>
+        <input type="text" [(ngModel)]="fullName" name="fullName" />
+      </div>
+
+      @if (!enlaceId) {
+        <div class="field-card">
+          <label>Contraseña *</label>
+          <input type="password" [(ngModel)]="password" name="password" />
+        </div>
+      }
+
+      <div class="field-card">
+        <label>Instituto *</label>
+        <select [(ngModel)]="idInstitucion" name="idInstitucion">
+          <option [ngValue]="0">Seleccione</option>
+          @for (inst of instituciones(); track inst.id) {
+            <option [ngValue]="inst.id">{{ inst.strNombre }}</option>
+          }
+        </select>
+      </div>
+
+      @if (!enlaceId) {
+        <div class="field-card">
+          <label>Correo institucional *</label>
+          <input type="email" [(ngModel)]="email" name="email" />
+        </div>
+      }
+
+      <div class="field-card">
+        <label>Nivel académico</label>
+        <select [(ngModel)]="idNivelAcademico" name="idNivelAcademico">
+          <option [ngValue]="null">Seleccione</option>
+          @for (nivel of nivelesAcademicos(); track nivel.id) {
+            <option [ngValue]="nivel.id">{{ nivel.strValor }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field-card">
+        <label>RFC</label>
+        <input type="text" [(ngModel)]="strRFC" name="strRFC" maxlength="13" />
+      </div>
+
+      <div class="field-card wide">
+        <label>Perfil académico (programas educativos en los que participa)</label>
+        <div class="radio-group">
+          <label><input type="radio" value="SI" [(ngModel)]="tienePerfilAcademico" name="tienePerfilAcademico" /> Sí</label>
+          <label><input type="radio" value="NO" [(ngModel)]="tienePerfilAcademico" name="tienePerfilAcademico" /> No</label>
+        </div>
+
+        @if (tienePerfilAcademico === 'SI') {
+          <div class="add-row">
+            <select [(ngModel)]="perfilAcademicoSeleccionado" name="perfilSeleccionado">
+              <option [ngValue]="null">Seleccione</option>
+              @for (perfil of perfilesAcademicos(); track perfil.id) {
+                <option [ngValue]="perfil.id">{{ perfil.strValor }}</option>
+              }
+            </select>
+            <button type="button" (click)="agregarPerfilAcademico()">Agregar</button>
+          </div>
+
+          <div class="added-list">
+            @for (perfil of perfilesAgregados; track perfil.id) {
+              <div class="added-item">
+                <span>{{ perfil.strValor }}</span>
+                <button type="button" (click)="quitarPerfilAcademico(perfil.id)">✕</button>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="field-card wide">
+        <label>SNI/SNII, en caso de aplicar</label>
+        <div class="radio-group">
+          <label><input type="radio" value="SI" [(ngModel)]="tieneSNI" name="tieneSNI" /> Sí</label>
+          <label><input type="radio" value="NO" [(ngModel)]="tieneSNI" name="tieneSNI" /> No</label>
+        </div>
+        @if (tieneSNI === 'SI') {
+          <input type="text" [(ngModel)]="strSNII" name="strSNII" maxlength="12" />
+        }
+      </div>
+    </div>
+
+    <div class="upload-row">
+      <div class="upload-card">
+        <label>Identificación oficial INE</label>
+        <input type="file" accept="image/*,application/pdf" (change)="onFileSelected($event, 'ine')" />
+
+        @if (previewIneUrl(); as url) {
+          @if (previewIneEsPdf()) {
+            <a [href]="url" target="_blank" rel="noopener noreferrer">Ver archivo seleccionado (PDF)</a>
+          } @else {
+            <img [src]="url" class="preview-image" alt="Vista previa INE" />
+          }
+        }
+      </div>
+      <div class="upload-card">
+        <label>Carga o archivo de fotografía del trabajador</label>
+        <input type="file" accept="image/*" (change)="onFileSelected($event, 'foto')" />
+
+        @if (previewFotoUrl(); as url) {
+          <img [src]="url" class="preview-image" alt="Vista previa fotografía" />
+        }
+      </div>
+    </div>
+
+    <button class="btn-primary" type="submit" [disabled]="isSaving()">
+      {{ isSaving() ? 'Guardando...' : (enlaceId ? 'Guardar Cambios' : 'Registrarse') }}
+    </button>
+  </form>
+
+  }
+</div>

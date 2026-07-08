@@ -52,6 +52,11 @@ export const routes: Routes = [
         path: 'instituciones',
         loadChildren: () =>
           import('./features/admin/institutions/institutionsRoutes').then(m => m.institutionsRoutes)
+      },
+      {
+        path: 'enlaces',
+        loadChildren: () =>
+          import('./features/admin/enlaces-academicos/enlacesRoutes').then(m => m.enlacesRoutes)
       }
     ]
   },
