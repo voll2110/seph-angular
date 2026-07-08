@@ -6,6 +6,7 @@ import { ApiResponse } from '../../../shared/models/apiResponse';
 import { SexResponse } from '../../../shared/models/catalogs/responses/sexResponse';
 import { PerfilAcademicoResponse } from '../../../shared/models/catalogs/responses/perfilAcademicoResponse';
 import { MunicipioResponse } from '../../../shared/models/catalogs/responses/municipioResponse';
+import { NivelAcademicoResponse } from '../../../shared/models/catalogs/responses/nivelAcademicoResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -50,4 +51,10 @@ export class CatalogService {
       `${this.apiUrl}/municipios`
     );
   }
+
+  getNivelesAcademicos(): Observable<ApiResponse<NivelAcademicoResponse[]>> {
+  return this.http.get<ApiResponse<NivelAcademicoResponse[]>>(
+    `${this.apiUrl}/niveles-academicos`
+  );
+}
 }
