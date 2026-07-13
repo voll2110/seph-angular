@@ -1,0 +1,166 @@
+<!-- Contenedor principal del Registro de Información Institucional. -->
+<div class="page">
+
+  <!-- Menú lateral del módulo. -->
+  <aside
+    class="sidebar"
+    [class.sidebar-collapsed]="menuCollapsed">
+
+    <!-- Expande o colapsa el menú lateral. -->
+    <button
+      class="hamburger"
+      type="button"
+      (click)="toggleMenu()">
+      ☰
+    </button>
+
+    <!-- Título del módulo. -->
+    <div
+      class="sidebar-title"
+      *ngIf="!menuCollapsed">
+
+      Registro de Información <br />
+      Institucional de la DGES
+
+    </div>
+
+    <!-- Navegación de las secciones institucionales. -->
+    <nav
+      class="menu"
+      *ngIf="!menuCollapsed">
+
+      <a
+        class="menu-item"
+        routerLink="/home">
+        Inicio
+      </a>
+
+      <!-- En un futuro puede dirigir al concentrado de registros. -->
+      <a
+        class="menu-item"
+        routerLink="/institutional-information">
+        Visualización de Registros
+      </a>
+
+      <!-- Módulo activo actualmente. -->
+      <a
+        class="menu-item"
+        [class.active]="currentStep === 1"
+        [class.completed]="enrollmentCompleted"
+        (click)="goToStep(1)">
+
+        Datos de Matrículas
+
+      </a>
+
+      <!-- Secciones futuras del registro institucional. -->
+      <a class="menu-item disabled">
+        Datos del Personal
+      </a>
+
+      <a class="menu-item disabled">
+        Datos de Infraestructura
+      </a>
+
+      <a class="menu-item disabled">
+        Datos de Finanzas
+      </a>
+
+      <a class="menu-item disabled">
+        Vinculación y Resultados
+      </a>
+
+      <a class="menu-item disabled">
+        Análisis Estratégico
+      </a>
+
+    </nav>
+
+  </aside>
+
+  <!-- Contenido del módulo seleccionado. -->
+  <main
+    class="content"
+    [class.content-expanded]="menuCollapsed">
+
+    <section class="form-wrapper">
+
+      <!-- Encabezado y avance del flujo institucional. -->
+      <div class="top-actions">
+
+        <button
+          class="btn-nav"
+          type="button"
+          routerLink="/home">
+
+          Atrás
+
+        </button>
+
+        <!-- Indicador del módulo actual. -->
+        <div class="steps">
+
+          <div
+            class="step"
+            [class.active]="currentStep === 1"
+            [class.completed]="enrollmentCompleted">
+
+            <span>
+              {{ enrollmentCompleted ? '✓' : '1' }}
+            </span>
+
+            <p>
+              Datos de Matrículas
+            </p>
+
+          </div>
+
+        </div>
+
+        <!-- Guarda el reporte de matrícula. -->
+         <button
+  class="btn-nav"
+  type="button"
+  [disabled]="
+    isSaving ||
+    (
+      enrollmentDataComponent?.reportSaved &&
+      !enrollmentDataComponent?.isEditing
+    )
+  "
+  (click)="saveEnrollmentData()">
+
+  {{
+    isSaving
+      ? 'Guardando...'
+      : enrollmentDataComponent?.reportSaved &&
+        enrollmentDataComponent?.isEditing
+        ? 'Guardar cambios'
+        : 'Guardar'
+  }}
+
+</button>
+
+      </div>
+
+      <!-- Avisos generados desde el componente contenedor. -->
+      <div
+        class="notification"
+        [class.success]="notificationType === 'success'"
+        [class.error]="notificationType === 'error'"
+        *ngIf="notificationMessage">
+
+        {{ notificationMessage }}
+
+      </div>
+
+      <!-- Formulario del módulo de matrícula. -->
+      <app-enrollment-data
+        *ngIf="currentStep === 1">
+      </app-enrollment-data>
+
+    </section>
+
+  </main>
+
+</div>

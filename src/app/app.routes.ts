@@ -30,7 +30,13 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/staff-registration/staffRegistrationRoutes')
             .then(m => m.staffRegistrationRoutes)
-      }
+      },
+      {
+  path: 'institutional-information',
+  loadChildren: () =>
+    import('./features/institutional-information/institutionalInformationRoutes')
+      .then(m => m.institutionalInformationRoutes)
+}
     ]
   },
   {

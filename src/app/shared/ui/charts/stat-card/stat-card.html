@@ -1,0 +1,48 @@
+<article
+  class="stat-card"
+  [class.increase]="isIncrease"
+  [class.decrease]="isDecrease">
+
+  <h3>Comparativo de matrícula</h3>
+
+  <div
+    class="periods"
+    *ngIf="previousPeriod; else noPreviousPeriod">
+
+    <div>
+      <span>Periodo anterior</span>
+      <strong>{{ previousPeriod }}</strong>
+    </div>
+
+    <span class="period-arrow">→</span>
+
+    <div>
+      <span>Periodo actual</span>
+      <strong>{{ currentPeriod }}</strong>
+    </div>
+
+  </div>
+
+  <ng-template #noPreviousPeriod>
+    <p class="no-period">
+      No existe un periodo anterior con información registrada.
+    </p>
+  </ng-template>
+
+  <div class="stat-result">
+
+    <span class="status">
+      {{ status }}
+    </span>
+
+    <strong class="difference">
+      {{ absoluteDifference }} alumnos
+    </strong>
+
+    <span class="percentage">
+      {{ absolutePercentage }}%
+    </span>
+
+  </div>
+
+</article>

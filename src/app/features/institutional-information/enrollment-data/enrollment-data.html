@@ -1,0 +1,380 @@
+<section class="enrollment-section">
+<div
+  class="save-message"
+  [class.success]="saveMessageType === 'success'"
+  [class.error]="saveMessageType === 'error'"
+  *ngIf="saveMessage">
+
+  {{ saveMessage }}
+
+</div>
+  <div class="section-header">
+
+    <div>
+      <h2>Datos de las Matrículas</h2>
+
+      <p>
+        Captura la información y revisa una vista previa antes de guardar.
+      </p>
+    </div>
+
+    <div class="view-actions">
+
+      <button
+        type="button"
+        [class.active]="activeView === 'capture'"
+        (click)="showCapture()">
+
+        Captura
+
+      </button>
+
+      <button
+        type="button"
+        [class.active]="activeView === 'preview'"
+        (click)="showPreview()">
+
+        Ver gráficas
+
+      </button>
+
+    </div>
+
+  </div>
+
+<!-- Acciones disponibles cuando el periodo ya tiene un reporte guardado. -->
+<div
+  class="edit-actions"
+  *ngIf="reportSaved">
+
+  <button
+    type="button"
+    class="btn-edit"
+    *ngIf="!isEditing"
+    (click)="enableEdit()">
+
+    Editar información
+
+  </button>
+
+  <ng-container *ngIf="isEditing">
+
+    <button
+      type="button"
+      class="btn-cancel"
+      (click)="cancelEdit()">
+
+      Cancelar edición
+
+    </button>
+
+    <span class="editing-message">
+      Puedes modificar los datos y presionar Guardar cambios.
+    </span>
+
+  </ng-container>
+
+</div>
+
+
+  <!-- Vista de captura. -->
+  <div *ngIf="activeView === 'capture'">
+
+    <!-- Primera página del formulario. -->
+    <div
+      class="form-page"
+      *ngIf="currentPage === 1">
+
+      <div class="form-grid">
+
+        <div class="form-card">
+
+          <label for="matriculaTotal">
+            Matrícula Total
+          </label>
+
+          <input
+            id="matriculaTotal"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="matriculaTotal" />
+
+          <label for="matriculaHombres">
+            Matrícula Total Hombres
+          </label>
+
+          <input
+            id="matriculaHombres"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="matriculaHombres" />
+
+          <label for="matriculaMujeres">
+            Matrícula Total Mujeres
+          </label>
+
+          <input
+            id="matriculaMujeres"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="matriculaMujeres" />
+
+        </div>
+
+        <div class="form-card">
+
+          <label for="matriculaTsu">
+            Matrícula por TSU
+          </label>
+
+          <input
+            id="matriculaTsu"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="matriculaTsu" />
+
+          <label for="matriculaLicenciatura">
+            Matrícula por Licenciatura
+          </label>
+
+          <input
+            id="matriculaLicenciatura"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="matriculaLicenciatura" />
+
+          <label for="matriculaPostgrado">
+            Matrícula por Posgrado
+          </label>
+
+          <input
+            id="matriculaPostgrado"
+            type="number"
+            min="0"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="matriculaPostgrado" />
+
+        </div>
+
+        <div class="form-card compact">
+
+          <label for="fechaRegistro">
+            Fecha de Registro
+          </label>
+
+          <input
+            id="fechaRegistro"
+            type="text"
+            [value]="fechaRegistro"
+            readonly />
+
+          <label for="periodo">
+            Periodo
+          </label>
+
+          <input
+            id="periodo"
+            type="text"
+            [value]="periodo"
+            readonly />
+
+        </div>
+
+      </div>
+
+      <div class="page-actions">
+
+        <button
+          type="button"
+          (click)="nextPage()">
+
+          Página 2 →
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- Segunda página del formulario. -->
+    <div
+      class="form-page"
+      *ngIf="currentPage === 2">
+
+      <div class="form-grid indicators-grid">
+
+        <div class="form-card">
+
+          <label for="tasaDesercion">
+            Tasa de deserción
+          </label>
+
+          <input
+            id="tasaDesercion"
+            type="number"
+            min="0"
+            max="100"
+            step="0.01"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="tasaDesercion" />
+
+          <label for="tasaReprobacion">
+            Tasa de Reprobación
+          </label>
+
+          <input
+            id="tasaReprobacion"
+            type="number"
+            min="0"
+            max="100"
+            step="0.01"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="tasaReprobacion" />
+
+          <label for="tasaEficienciaTerminal">
+            Tasa de Eficiencia Terminal
+          </label>
+
+          <input
+            id="tasaEficienciaTerminal"
+            type="number"
+            min="0"
+            max="100"
+            step="0.01"
+            [disabled]="reportSaved && !isEditing"
+            [(ngModel)]="tasaEficienciaTerminal" />
+
+        </div>
+
+      </div>
+
+      <div class="page-actions split">
+
+        <button
+          type="button"
+          (click)="previousPage()">
+
+          ← Página 1
+
+        </button>
+
+        <button
+          type="button"
+          (click)="showPreview()">
+
+          Ver gráficas
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Vista previa. -->
+  <div
+  class="preview-panel"
+  *ngIf="activeView === 'preview'">
+
+  <!-- Indica que los datos todavía no han sido guardados. -->
+  <div class="preview-notice">
+    Vista previa con datos aún no guardados.
+  </div>
+
+  <!-- Resultado automático del comparativo con el periodo anterior. -->
+  <p
+    class="comparison-message"
+    *ngIf="isLoadingComparison">
+
+    Cargando comparativo...
+
+  </p>
+
+  <p
+    class="comparison-message error"
+    *ngIf="comparisonError">
+
+    {{ comparisonError }}
+
+  </p>
+
+  <app-stat-card
+    *ngIf="!isLoadingComparison && !comparisonError"
+    [previousPeriod]="previousPeriod"
+    [currentPeriod]="currentPeriod || periodo || 'Periodo actual'"
+    [difference]="difference"
+    [percentage]="percentage"
+    [status]="comparisonStatus">
+  </app-stat-card>
+
+  <!-- Gráficas generadas con la información capturada. -->
+  <div class="preview-grid">
+
+    <app-bar-chart
+      [title]="'Matrícula por sexo'"
+      [labels]="['Hombres', 'Mujeres']"
+      [series]="[
+        {
+          name: periodo || 'Periodo actual',
+          values: [
+            matriculaHombres ?? 0,
+            matriculaMujeres ?? 0
+          ]
+        }
+      ]">
+    </app-bar-chart>
+
+    <app-bar-chart
+      [title]="'Matrícula por nivel educativo'"
+      [labels]="[
+        'TSU',
+        'Licenciatura',
+        'Posgrado'
+      ]"
+      [series]="[
+        {
+          name: periodo || 'Periodo actual',
+          values: [
+            matriculaTsu ?? 0,
+            matriculaLicenciatura ?? 0,
+            matriculaPostgrado ?? 0
+          ]
+        }
+      ]">
+    </app-bar-chart>
+
+    <app-bar-chart
+      [title]="'Indicadores institucionales'"
+      [labels]="[
+        'Deserción',
+        'Reprobación',
+        'Eficiencia terminal'
+      ]"
+      [series]="[
+        {
+          name: periodo || 'Periodo actual',
+          values: [
+            tasaDesercion ?? 0,
+            tasaReprobacion ?? 0,
+            tasaEficienciaTerminal ?? 0
+          ]
+        }
+      ]">
+    </app-bar-chart>
+
+  </div>
+
+</div>
+     
+
+   
+
+
+
+</section>
