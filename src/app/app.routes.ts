@@ -63,6 +63,11 @@ export const routes: Routes = [
         path: 'enlaces',
         loadChildren: () =>
           import('./features/admin/enlaces-academicos/enlacesRoutes').then(m => m.enlacesRoutes)
+      },
+      {
+        path: 'bitacoras',
+        loadChildren: () =>
+          import('./features/admin/bitacoras/bitacorasRoutes').then(m => m.bitacorasRoutes)
       }
     ]
   },

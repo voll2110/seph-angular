@@ -1,0 +1,84 @@
+<div class="bitacora-page">
+
+  <div class="bitacora-header">
+    <div class="bitacora-title">
+      <h2>Bitácora — {{ tituloModulo() }}</h2>
+      <p>Historial de movimientos registrados en este módulo</p>
+    </div>
+    <a class="btn-secondary" routerLink="/admin">Volver al panel</a>
+  </div>
+
+  @if (notificationMessage()) {
+    <div class="notification error">
+      {{ notificationMessage() }}
+    </div>
+  }
+
+  @if (isLoading()) {
+    <p class="loading">Cargando bitácora...</p>
+  }
+
+  @if (!isLoading() && registros().length === 0) {
+    <div class="empty-state">
+      <p>Todavía no hay movimientos registrados en este módulo.</p>
+    </div>
+  }
+
+  @if (!isLoading() && registros().length > 0) {
+
+    <div class="legend">
+      <span class="legend-item"><span class="legend-dot fila-agregar"></span> Agregar</span>
+      <span class="legend-item"><span class="legend-dot fila-editar"></span> Editar</span>
+      <span class="legend-item"><span class="legend-dot fila-desactivar"></span> Desactivar</span>
+      <span class="legend-item"><span class="legend-dot fila-reactivar"></span> Reactivar</span>
+    </div>
+
+    <div class="table-card">
+      <table class="bitacora-table">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Acción</th>
+            <th>Usuario</th>
+            <th>Id registro</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (registro of registros(); track registro.id) {
+            <tr [class]="claseFila(registro.accion)">
+              <td>{{ registro.fechaAccion | date: 'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ registro.accion }}</td>
+              <td>{{ registro.usuarioNombre || registro.idUsuario }}</td>
+              <td>{{ registro.idRegistro }}</td>
+              <td>
+                <button type="button" class="btn-detalle" (click)="toggleDetalle(registro.id)">
+                  {{ filaExpandida() === registro.id ? 'Ocultar' : 'Ver' }}
+                </button>
+              </td>
+            </tr>
+            @if (filaExpandida() === registro.id) {
+              <tr class="fila-detalle">
+                <td colspan="5">
+                  <pre>{{ parsearJson(registro.jsonData) | json }}</pre>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination">
+      <button type="button" [disabled]="pagina() <= 1" (click)="irAPagina(pagina() - 1)">
+        Anterior
+      </button>
+      <span>Página {{ pagina() }} de {{ totalPaginas() }} ({{ totalRegistros() }} registros)</span>
+      <button type="button" [disabled]="pagina() >= totalPaginas()" (click)="irAPagina(pagina() + 1)">
+        Siguiente
+      </button>
+    </div>
+
+  }
+
+</div>
