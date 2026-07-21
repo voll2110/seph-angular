@@ -351,26 +351,40 @@
 
       </div>
 
-      <!-- Navegación de la segunda página. -->
-      <div class="page-actions split">
+     <!-- Navegación y guardado de la segunda página. -->
+<div class="page-actions split">
 
-        <button
-          type="button"
-          (click)="previousPage()">
+  <button
+    type="button"
+    (click)="previousPage()">
 
-          ← Página 1
+    ← Página 1
 
-        </button>
+  </button>
 
-        <button
-          type="button"
-          (click)="showPreview()">
+  <!-- Guarda un reporte nuevo. -->
+  <button
+    *ngIf="!reportSaved"
+    type="button"
+    [disabled]="isSaving"
+    (click)="savePersonalData()">
 
-          Vista previa
+    {{ isSaving ? 'Guardando...' : 'Guardar información' }}
 
-        </button>
+  </button>
 
-      </div>
+  <!-- Guarda únicamente los cambios durante la edición. -->
+  <button
+    *ngIf="reportSaved && isEditing"
+    type="button"
+    [disabled]="isSaving"
+    (click)="savePersonalData()">
+
+    {{ isSaving ? 'Guardando...' : 'Guardar cambios' }}
+
+  </button>
+
+</div>
 
     </div>
 
@@ -381,9 +395,15 @@
     class="preview-panel"
     *ngIf="activeView === 'preview'">
 
-    <div class="preview-notice">
-      Revisa que la información sea correcta antes de guardar.
-    </div>
+   <div class="preview-notice">
+
+  {{
+    reportSaved
+      ? 'La información mostrada corresponde al reporte registrado.'
+      : 'Vista previa con datos aún no guardados.'
+  }}
+
+</div>
 
     <div class="preview-grid">
 
@@ -475,14 +495,22 @@
 
     </div>
 
-    <!-- Gráficas generadas con la información capturada. -->
+    
+<!-- Gráficas generadas con la información capturada. -->
 <div class="preview-grid charts-grid">
+
+  <!-- Personal por categoría. -->
   <app-bar-chart
     [title]="'Personal por categoría'"
     [labels]="[
       'Directivos',
       'Administrativos',
       'Docentes'
+    ]"
+    [colors]="[
+      '#65122E',
+      '#963E5C',
+      '#B98A67'
     ]"
     [series]="[
       {
@@ -496,6 +524,7 @@
     ]">
   </app-bar-chart>
 
+  <!-- Personal por categoría y sexo. -->
   <app-bar-chart
     [title]="'Personal por categoría y sexo'"
     [labels]="[
@@ -505,6 +534,7 @@
     [series]="[
       {
         name: 'Directivos',
+        color: '#65122E',
         values: [
           personalReport.directivosHombres ?? 0,
           personalReport.directivosMujeres ?? 0
@@ -512,6 +542,7 @@
       },
       {
         name: 'Administrativos',
+        color: '#963E5C',
         values: [
           personalReport.administrativosHombres ?? 0,
           personalReport.administrativosMujeres ?? 0
@@ -519,6 +550,7 @@
       },
       {
         name: 'Docentes',
+        color: '#B98A67',
         values: [
           personalReport.docentesHombres ?? 0,
           personalReport.docentesMujeres ?? 0
@@ -527,12 +559,18 @@
     ]">
   </app-bar-chart>
 
+  <!-- Distribución de docentes por contratación. -->
   <app-bar-chart
     [title]="'Distribución de docentes por tipo de contratación'"
     [labels]="[
       'Tiempo completo',
       'Asignatura',
       'Por hora'
+    ]"
+    [colors]="[
+      '#65122E',
+      '#963E5C',
+      '#B98A67'
     ]"
     [series]="[
       {
@@ -548,21 +586,15 @@
 
 </div>
 
+<!-- Regresa a la captura para corregir información. -->
+<div class="page-actions">
 
+  <button
+    type="button"
+    (click)="showCapture()">
 
-    <!-- Regresa a la captura para corregir información. -->
-    <div class="page-actions">
+    Regresar a captura
 
-      <button
-        type="button"
-        (click)="showCapture()">
+  </button>
 
-        Regresar a captura
-
-      </button>
-
-    </div>
-
-  </div>
-
-</section>
+</div>

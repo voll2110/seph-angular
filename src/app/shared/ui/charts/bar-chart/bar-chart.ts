@@ -16,6 +16,12 @@ import type { EChartsOption } from 'echarts';
 export interface BarChartSeries {
   name: string;
   values: number[];
+
+  /*
+   * Color utilizado por todas las barras
+   * correspondientes a esta serie.
+   */
+  color?: string;
 }
 
 /*
@@ -48,17 +54,28 @@ export class BarChartComponent implements OnChanges {
    */
   @Input() series: BarChartSeries[] = [];
 
+  /*
+   * Colores asignados a los indicadores.
+   * Cada posición corresponde a una categoría.
+   */
+  @Input() colors: string[] = [];
+
   // Configuración final de Apache ECharts.
   chartOptions: EChartsOption = {};
 
   ngOnChanges(changes: SimpleChanges): void {
+
     if (
       changes['title'] ||
       changes['labels'] ||
-      changes['series']
+      changes['series'] ||
+      changes['colors']
     ) {
+
       this.buildChart();
+
     }
+
   }
 
   /*
@@ -66,7 +83,82 @@ export class BarChartComponent implements OnChanges {
    * con una o varias series de información.
    */
   private buildChart(): void {
+
+    /*
+     * Cuando existe una sola serie y se reciben
+     * colores por indicador, cada categoría se
+     * convierte en una serie independiente.
+     *
+     * Esto permite que la leyenda muestre el nombre
+     * y el color correspondiente de cada barra.
+     */
+    const chartSeries =
+      this.series.length === 1 && this.colors.length > 0
+        ? this.labels.map((label, index) => ({
+
+            name: label,
+
+            type: 'bar' as const,
+
+            data: this.labels.map(
+              (_, dataIndex) =>
+                dataIndex === index
+                  ? this.series[0].values[index] ?? 0
+                  : null
+            ),
+
+            itemStyle: {
+              color:
+                this.colors[index] ??
+                '#65122E'
+            },
+
+            barMaxWidth: 42,
+
+            label: {
+              show: true,
+              position: 'top' as const
+            },
+
+            emphasis: {
+              focus: 'series' as const
+            }
+
+          }))
+        : this.series.map((item, index) => ({
+
+            name: item.name,
+
+            type: 'bar' as const,
+
+            data: item.values,
+
+            /*
+             * En gráficas con varias series,
+             * cada serie conserva su color.
+             */
+            itemStyle: {
+              color:
+                item.color ??
+                this.colors[index] ??
+                '#65122E'
+            },
+
+            barMaxWidth: 42,
+
+            label: {
+              show: true,
+              position: 'top' as const
+            },
+
+            emphasis: {
+              focus: 'series' as const
+            }
+
+          }));
+
     this.chartOptions = {
+
       title: {
         text: this.title,
         left: 'center',
@@ -83,6 +175,10 @@ export class BarChartComponent implements OnChanges {
         }
       },
 
+      /*
+       * La leyenda toma automáticamente el nombre
+       * y color correspondiente de cada indicador.
+       */
       legend: {
         top: 30
       },
@@ -108,19 +204,10 @@ export class BarChartComponent implements OnChanges {
         min: 0
       },
 
-      series: this.series.map(item => ({
-        name: item.name,
-        type: 'bar',
-        data: item.values,
-        barMaxWidth: 42,
-        label: {
-          show: true,
-          position: 'top'
-        },
-        emphasis: {
-          focus: 'series'
-        }
-      }))
+      series: chartSeries
+
     };
+
   }
+
 }

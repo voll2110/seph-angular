@@ -1,107 +1,183 @@
 <form class="form-card">
-  <h2>Datos del Contrato</h2>
+
+  <h2>
+    Datos del Contrato
+  </h2>
 
   <div
     class="notification"
     [class.success]="notificationType() === 'success'"
     [class.error]="notificationType() === 'error'"
     *ngIf="notificationMessage()">
+
     {{ notificationMessage() }}
+
   </div>
 
   <div class="form-content">
+
     <div class="contract-grid">
 
+      <!-- Institución perteneciente -->
       <div class="field-card">
-        <label>Instituto perteneciente</label>
-        <select
-  disabled
-  [(ngModel)]="contract.idInstitucion"
-  name="idInstitucion">
-  <option [ngValue]="contract.idInstitucion">
-    {{ institutionName() }}
-  </option>
-</select>
-      </div>
 
-      <div class="field-card">
-       <label>Tipo de personal</label>
-<select
-  [(ngModel)]="contract.idTipoPersonal"
-  name="idTipoPersonal">
-
-  <option [ngValue]="0"></option>
-
-  <option
-    *ngFor="let item of tiposPersonal()"
-    [ngValue]="item.id">
-
-    {{ item.strValor || item.strDescripcion || item.nombre || item.descripcion || item.id }}
-
-  </option>
-</select>
-
-        <label>Tipo de contratación docente</label>
-<select
-  [(ngModel)]="contract.idTipoContrato"
-  name="idTipoContrato">
-
-  <option [ngValue]="0"></option>
-
-  <option
-    *ngFor="let item of tiposContrato()"
-    [ngValue]="item.id">
-
-    {{ item.strValor || item.strDescripcion || item.nombre || item.descripcion || item.id }}
-
-  </option>
-</select>
-
-        <label *ngIf="contract.idTipoContrato">
-          Si eligió otro especifique cuál
+        <label>
+          Instituto perteneciente
         </label>
-        <input
-          *ngIf="contract.idTipoContrato"
-          type="text"
-          maxlength="100"
-          [(ngModel)]="contract.strOtroTipoContrato"
-          name="strOtroTipoContrato" />
+
+        <select
+          disabled
+          [(ngModel)]="contract.idInstitucion"
+          name="idInstitucion">
+
+          <option [ngValue]="contract.idInstitucion">
+            {{ institutionName() }}
+          </option>
+
+        </select>
+
       </div>
 
+      <!-- Tipo de personal -->
       <div class="field-card">
-        <label>Fecha de ingreso a la institución</label>
+
+        <label>
+          Tipo de personal
+        </label>
+
+        <select
+          [(ngModel)]="contract.idTipoPersonal"
+          name="idTipoPersonal">
+
+          <option [ngValue]="0"></option>
+
+          <option
+            *ngFor="let item of tiposPersonal()"
+            [ngValue]="item.id">
+
+            {{
+              item.strValor ||
+              item.strDescripcion ||
+              item.nombre ||
+              item.descripcion ||
+              item.id
+            }}
+
+          </option>
+
+        </select>
+
+      </div>
+
+      <!-- Fecha de ingreso -->
+      <div class="field-card">
+
+        <label>
+          Fecha de ingreso a la institución
+        </label>
+
         <input
           type="date"
           [max]="maxDate"
           [(ngModel)]="contract.dateFechaIngreso"
           name="dateFechaIngreso" />
 
-        <label>Fecha de inicio del contrato vigente</label>
+      </div>
+
+      <!-- Tipo de contratación -->
+      <div class="field-card">
+
+        <label>
+          Tipo de contratación docente
+        </label>
+
+        <select
+          [(ngModel)]="contract.idTipoContrato"
+          name="idTipoContrato"
+          (ngModelChange)="onTipoContratoChange()">
+
+          <option [ngValue]="0"></option>
+
+          <option
+            *ngFor="let item of tiposContrato()"
+            [ngValue]="item.id">
+
+            {{
+              item.strValor ||
+              item.strDescripcion ||
+              item.nombre ||
+              item.descripcion ||
+              item.id
+            }}
+
+          </option>
+
+        </select>
+
+        <ng-container *ngIf="isOtroTipoContrato()">
+
+          <label>
+            Si eligió otro, especifique cuál
+          </label>
+
+          <input
+            type="text"
+            maxlength="100"
+            [(ngModel)]="contract.strOtroTipoContrato"
+            name="strOtroTipoContrato" />
+
+        </ng-container>
+
+      </div>
+
+      <!-- Fecha de inicio -->
+      <div class="field-card">
+
+        <label>
+          Fecha de inicio del contrato vigente
+        </label>
+
         <input
           type="date"
           [max]="maxDate"
           [(ngModel)]="contract.dateFechaInicio"
           name="dateFechaInicio" />
+
       </div>
 
+      <!-- Área -->
       <div class="field-card">
-        <label>Área o departamento de adscripción</label>
-<select
-  [(ngModel)]="contract.idArea"
-  name="idArea">
 
-  <option [ngValue]="0"></option>
+        <label>
+          Área o departamento de adscripción
+        </label>
 
-  <option
-    *ngFor="let item of areas()"
-    [ngValue]="item.id">
+        <select
+          [(ngModel)]="contract.idArea"
+          name="idArea">
 
-    {{ item.strValor || item.strDescripcion || item.nombre || item.descripcion || item.id }}
+          <option [ngValue]="0"></option>
 
-  </option>
-</select>
+          <option
+            *ngFor="let item of areas()"
+            [ngValue]="item.id">
+
+            {{
+              item.strValor ||
+              item.strDescripcion ||
+              item.nombre ||
+              item.descripcion ||
+              item.id
+            }}
+
+          </option>
+
+        </select>
+
       </div>
 
     </div>
+
   </div>
+
 </form>

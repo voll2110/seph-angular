@@ -110,6 +110,46 @@ export class ContractHistoryComponent implements OnInit {
     });
   }
 
+  /*
+ * Indica si el tipo de contratación
+ * seleccionado corresponde a la opción "Otro".
+ */
+isOtroTipoContrato(): boolean {
+
+  const tipoSeleccionado =
+    this.tiposContrato().find(
+      item =>
+        item.id ===
+        this.contract.idTipoContrato
+    );
+
+  const nombreTipo =
+    tipoSeleccionado?.strValor ||
+    tipoSeleccionado?.strDescripcion ||
+    tipoSeleccionado?.nombre ||
+    tipoSeleccionado?.descripcion ||
+    '';
+
+  return nombreTipo
+    .trim()
+    .toLowerCase() === 'otro';
+
+}
+
+/*
+ * Limpia el campo de otro tipo de contrato
+ * cuando el usuario selecciona una opción diferente.
+ */
+onTipoContratoChange(): void {
+
+  if (!this.isOtroTipoContrato()) {
+
+    this.contract.strOtroTipoContrato = '';
+
+  }
+
+}
+
   saveContractHistory(): void {
     if (this.isSaving()) {
       return;

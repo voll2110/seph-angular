@@ -250,30 +250,27 @@ Datos de Infraestructura
 <div class="page-actions split">
 
   <!-- Regresa al formulario para corregir información. -->
-  <button
-    type="button"
-    (click)="showCapture()">
+ 
 
-    Regresar a captura
-
-  </button>
-
-    <!-- Guarda o actualiza el reporte de infraestructura. -->
+      <!-- Registrar un nuevo reporte -->
     <button
-        type="button"
-        [disabled]="
-        isSaving ||
-        (reportSaved && !isEditing)
-        "
-        (click)="saveInfrastructureData()">
+      *ngIf="!reportSaved"
+      type="button"
+      [disabled]="isSaving"
+      (click)="saveInfrastructureData()">
 
-        {{
-        isSaving
-            ? 'Guardando...'
-            : reportSaved
-            ? 'Guardar cambios'
-            : 'Guardar información'
-        }}
+      {{ isSaving ? 'Guardando...' : 'Guardar información' }}
+
+    </button>
+
+    <!-- Guardar cambios únicamente durante la edición -->
+    <button
+      *ngIf="reportSaved && isEditing"
+      type="button"
+      [disabled]="isSaving"
+      (click)="saveInfrastructureData()">
+
+      {{ isSaving ? 'Guardando...' : 'Guardar cambios' }}
 
     </button>
 
@@ -288,9 +285,15 @@ Datos de Infraestructura
     class="preview-panel"
     *ngIf="activeView === 'preview'">
 
-    <div class="preview-notice">
-      Revisa que la información sea correcta antes de guardar.
-    </div>
+   <div class="preview-notice">
+
+  {{
+    reportSaved
+      ? 'La información mostrada corresponde al reporte registrado.'
+      : 'Vista previa con datos aún no guardados.'
+  }}
+
+</div>
 
     <div class="preview-grid">
 
@@ -386,71 +389,100 @@ Datos de Infraestructura
     <!-- Gráficas generadas con la información capturada. -->
     <div class="preview-grid charts-grid">
 
-      <!-- Comparación de espacios educativos. -->
       <app-bar-chart
-        [title]="'Espacios educativos disponibles'"
-        [labels]="[
-          'Aulas',
-          'Laboratorios',
-          'Talleres'
-        ]"
-        [series]="[
-          {
-            name: periodo || 'Periodo actual',
-            values: [
-              infrastructureReport.totalAulas ?? 0,
-              infrastructureReport.totalLaboratorios ?? 0,
-              infrastructureReport.totalTalleres ?? 0
-            ]
-          }
-        ]">
-      </app-bar-chart>
+  [title]="'Espacios educativos disponibles'"
+  [labels]="[
+    'Aulas',
+    'Laboratorios',
+    'Talleres'
+  ]"
+ [colors]="[
+  '#65122E',
+  '#8C3A55',
+  '#B48664'
+]"
+  [series]="[
+    {
+      name: periodo || 'Periodo actual',
+      values: [
+        infrastructureReport.totalAulas ?? 0,
+        infrastructureReport.totalLaboratorios ?? 0,
+        infrastructureReport.totalTalleres ?? 0
+      ]
+    }
+  ]">
+</app-bar-chart>
 
       <!-- Comparación de bibliotecas y equipos de cómputo. -->
-      <app-bar-chart
-        [title]="'Biblioteca y equipos de cómputo'"
-        [labels]="[
-          'Bibliotecas',
-          'Equipos de cómputo'
-        ]"
-        [series]="[
-          {
-            name: periodo || 'Periodo actual',
-            values: [
-              infrastructureReport.totalBibliotecas ?? 0,
-              infrastructureReport.totalComputo ?? 0
-            ]
-          }
-        ]">
-      </app-bar-chart>
+     <app-bar-chart
+  [title]="'Biblioteca y equipos de cómputo'"
+  [labels]="[
+    'Bibliotecas',
+    'Equipos de cómputo'
+  ]"
+ [colors]="[
+  '#C9A28A',
+  '#8C3A55'
+]"
+  [series]="[
+    {
+      name: periodo || 'Periodo actual',
+      values: [
+        infrastructureReport.totalBibliotecas ?? 0,
+        infrastructureReport.totalComputo ?? 0
+      ]
+    }
+  ]">
+</app-bar-chart>
+
+          <!-- Servicios y condiciones de accesibilidad. -->
+    <app-bar-chart
+  [title]="'Servicios y accesibilidad'"
+  [labels]="[
+    'Acceso a internet',
+    'Instalaciones accesibles'
+  ]"
+  [colors]="[
+  '#B48664',
+  '#65122E'
+]"
+  [series]="[
+    {
+      name: periodo || 'Periodo actual',
+      values: [
+        getInternetName() === 'Sí' ? 1 : 0,
+        getDiscapacitadoName() === 'Sí' ? 1 : 0
+      ]
+    }
+  ]">
+</app-bar-chart>
 
     </div>
 
 
     
    <!-- Guarda o actualiza el reporte de infraestructura. -->
-<div class="page-actions split">
+<div class="page-actions">
 
+  <!-- Registrar un nuevo reporte -->
   <button
+    *ngIf="!reportSaved"
     type="button"
-    (click)="showCapture()">
+    [disabled]="isSaving"
+    (click)="saveInfrastructureData()">
 
-    Regresar a captura
+    {{ isSaving ? 'Guardando...' : 'Guardar información' }}
 
   </button>
 
+  <!-- Guardar cambios únicamente durante la edición -->
   <button
+    *ngIf="reportSaved && isEditing"
     type="button"
-    [disabled]="isSaving || (reportSaved && !isEditing)"
+    [disabled]="isSaving"
     (click)="saveInfrastructureData()">
 
-    {{
-      isSaving
-        ? 'Guardando...'
-        : reportSaved
-          ? 'Guardar cambios'
-          : 'Guardar información'
-    }}
+    {{ isSaving ? 'Guardando...' : 'Guardar cambios' }}
 
   </button>
 

@@ -253,25 +253,29 @@
 
       </div>
 
-      <div class="page-actions split">
+      <!-- Navegación y guardado de la segunda página. -->
+<div class="page-actions split">
 
-        <button
-          type="button"
-          (click)="previousPage()">
+  <button
+    type="button"
+    (click)="previousPage()">
 
-          ← Página 1
+    ← Página 1
 
-        </button>
+  </button>
 
-        <button
-          type="button"
-          (click)="showPreview()">
+  <!-- Guarda los cambios únicamente durante la edición. -->
+  <button
+    *ngIf="reportSaved && isEditing"
+    type="button"
+    [disabled]="isSaving"
+    (click)="saveEnrollmentData()">
 
-          Ver gráficas
+    {{ isSaving ? 'Guardando...' : 'Guardar cambios' }}
 
-        </button>
+  </button>
 
-      </div>
+</div>
 
     </div>
 
@@ -284,8 +288,14 @@
 
   <!-- Indica que los datos todavía no han sido guardados. -->
   <div class="preview-notice">
-    Vista previa con datos aún no guardados.
-  </div>
+
+  {{
+    reportSaved
+      ? 'La información mostrada corresponde al reporte registrado.'
+      : 'Vista previa con datos aún no guardados.'
+  }}
+
+</div>
 
   <!-- Resultado automático del comparativo con el periodo anterior. -->
   <p
@@ -315,59 +325,81 @@
 
   <!-- Gráficas generadas con la información capturada. -->
 <div class="preview-grid charts-grid">
-    <app-bar-chart
-      [title]="'Matrícula por sexo'"
-      [labels]="['Hombres', 'Mujeres']"
-      [series]="[
-        {
-          name: periodo || 'Periodo actual',
-          values: [
-            matriculaHombres ?? 0,
-            matriculaMujeres ?? 0
-          ]
-        }
-      ]">
-    </app-bar-chart>
 
-    <app-bar-chart
-      [title]="'Matrícula por nivel educativo'"
-      [labels]="[
-        'TSU',
-        'Licenciatura',
-        'Posgrado'
-      ]"
-      [series]="[
-        {
-          name: periodo || 'Periodo actual',
-          values: [
-            matriculaTsu ?? 0,
-            matriculaLicenciatura ?? 0,
-            matriculaPostgrado ?? 0
-          ]
-        }
-      ]">
-    </app-bar-chart>
+  <!-- Matrícula por sexo. -->
+  <app-bar-chart
+    [title]="'Matrícula por sexo'"
+    [labels]="[
+      'Hombres',
+      'Mujeres'
+    ]"
+    [colors]="[
+      '#65122E',
+      '#B98A67'
+    ]"
+    [series]="[
+      {
+        name: periodo || 'Periodo actual',
+        values: [
+          matriculaHombres ?? 0,
+          matriculaMujeres ?? 0
+        ]
+      }
+    ]">
+  </app-bar-chart>
 
-    <app-bar-chart
-      [title]="'Indicadores institucionales'"
-      [labels]="[
-        'Deserción',
-        'Reprobación',
-        'Eficiencia terminal'
-      ]"
-      [series]="[
-        {
-          name: periodo || 'Periodo actual',
-          values: [
-            tasaDesercion ?? 0,
-            tasaReprobacion ?? 0,
-            tasaEficienciaTerminal ?? 0
-          ]
-        }
-      ]">
-    </app-bar-chart>
+  <!-- Matrícula por nivel educativo. -->
+  <app-bar-chart
+    [title]="'Matrícula por nivel educativo'"
+    [labels]="[
+      'TSU',
+      'Licenciatura',
+      'Posgrado'
+    ]"
+    [colors]="[
+      '#65122E',
+      '#963E5C',
+      '#B98A67'
+    ]"
+    [series]="[
+      {
+        name: periodo || 'Periodo actual',
+        values: [
+          matriculaTsu ?? 0,
+          matriculaLicenciatura ?? 0,
+          matriculaPostgrado ?? 0
+        ]
+      }
+    ]">
+  </app-bar-chart>
 
-  </div>
+  <!-- Indicadores institucionales. -->
+  <app-bar-chart
+    [title]="'Indicadores institucionales'"
+    [labels]="[
+      'Deserción',
+      'Reprobación',
+      'Eficiencia terminal'
+    ]"
+    [colors]="[
+      '#65122E',
+      '#963E5C',
+      '#B98A67'
+    ]"
+    [series]="[
+      {
+        name: periodo || 'Periodo actual',
+        values: [
+          tasaDesercion ?? 0,
+          tasaReprobacion ?? 0,
+          tasaEficienciaTerminal ?? 0
+        ]
+      }
+    ]">
+  </app-bar-chart>
+
+</div>
+
 
 </div>
      

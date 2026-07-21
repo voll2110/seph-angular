@@ -47,19 +47,32 @@
   }
 }
 
+/*
+ * Contenedor general de los campos de matrícula.
+ * Mantiene el estilo utilizado en Registrar Institución.
+ */
 .form-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: start;
-  gap: 32px;
+  gap: 18px 16px;
+  padding: 24px;
+  border: 1px solid #d5d5d5;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.18);
 }
 
+/*
+ * Cada agrupación conserva únicamente
+ * la distribución de sus campos.
+ */
 .form-card {
-  padding: 16px 14px;
-  border: 1px solid #d5d5d5;
-  border-radius: 12px;
-  background: #ffffff;
-  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.18);
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 
   label {
     display: block;
@@ -68,31 +81,57 @@
     font-size: 11px;
   }
 
-  input {
+  input,
+  select,
+  textarea {
     width: 100%;
-    height: 36px;
-    margin-bottom: 10px;
-    padding: 0 10px;
-    border: none;
-    border-radius: 7px;
-    background: #d9d9d9;
+    min-height: 36px;
+    margin-bottom: 14px;
+    padding: 0 12px;
+    border: 1px solid #d5d5d5;
+    border-radius: 5px;
+    background: #ffffff;
     box-sizing: border-box;
+    color: #222222;
+    font-family: inherit;
     font-size: 12px;
+    outline: none;
   }
 
-  input:last-child {
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: #65122e;
+  }
+
+  textarea {
+    min-height: 80px;
+    padding-top: 10px;
+    resize: vertical;
+  }
+
+  input:last-child,
+  select:last-child,
+  textarea:last-child {
     margin-bottom: 0;
   }
 }
 
+/*
+ * Evita limitar el ancho de columnas específicas.
+ */
 .form-card.compact {
-  max-width: 250px;
+  max-width: none;
 }
 
 .indicators-grid {
   grid-template-columns: minmax(260px, 340px);
 }
 
+/*
+ * Navegación entre las páginas internas
+ * del formulario de matrícula.
+ */
 .page-actions {
   display: flex;
   justify-content: flex-end;
@@ -100,13 +139,20 @@
 
   button {
     min-width: 130px;
-    height: 30px;
+    height: 36px;
+    padding: 0 16px;
     border: none;
     border-radius: 5px;
     background: #b48664;
     color: #ffffff;
     font-size: 11px;
+    font-weight: 600;
     cursor: pointer;
+  }
+
+  button:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
   }
 }
 
@@ -114,122 +160,36 @@
   justify-content: space-between;
 }
 
-.preview-notice {
-  margin-bottom: 14px;
-  padding: 9px 12px;
-  border: 1px solid #d7b46a;
-  border-radius: 6px;
-  background: #fff8e7;
-  color: #75591f;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.preview-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.preview-card {
-  min-height: 150px;
-  padding: 16px;
-  border: 1px solid #dddddd;
-  border-radius: 10px;
-  background: #ffffff;
-
-  h3 {
-    margin: 0 0 12px;
-    color: #65122e;
-    font-size: 14px;
-  }
-
-  p {
-    margin: 7px 0;
-    color: #444444;
-    font-size: 12px;
-  }
-}
-
-@media (max-width: 900px) {
-  .form-grid,
-  .preview-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .form-card.compact {
-    max-width: none;
-  }
-}
-.comparison-message {
-  margin: 0;
-  padding: 12px;
-
-  border: 1px solid #dddddd;
-  border-radius: 8px;
-  background: #ffffff;
-
-  color: #555555;
-  font-size: 12px;
-  text-align: center;
-}
-
-.comparison-message.error {
-  border-color: #d93025;
-  background: #fdecec;
-  color: #9b1c1c;
-}
-
-.preview-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.preview-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-}
-
-/* La gráfica de indicadores ocupa todo el ancho. */
-.preview-grid app-bar-chart:last-child {
-  grid-column: 1 / -1;
-}
-
-@media (max-width: 900px) {
-  .preview-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .preview-grid app-bar-chart:last-child {
-    grid-column: auto;
-  }
-}
+/*
+ * Mensajes mostrados después de guardar,
+ * actualizar, cancelar o validar información.
+ */
 .save-message {
   max-width: 620px;
   margin: 0 auto 16px;
   padding: 9px 14px;
-
   border-radius: 6px;
-
   font-size: 12px;
   font-weight: 600;
   text-align: center;
 }
 
 .save-message.success {
+  border: 1px solid #23b64b;
   background: #eaf7ee;
   color: #1f7a3a;
-  border: 1px solid #23b64b;
 }
 
 .save-message.error {
+  border: 1px solid #d93025;
   background: #fdecec;
   color: #9b1c1c;
-  border: 1px solid #d93025;
 }
 
+/*
+ * Acciones disponibles cuando existe
+ * un reporte previamente registrado.
+ */
 .edit-actions {
   display: flex;
   align-items: center;
@@ -265,11 +225,96 @@
 }
 
 /*
+ * Apariencia de los campos bloqueados
+ * después de guardar el reporte.
+ */
+.form-card input:disabled,
+.form-card select:disabled,
+.form-card textarea:disabled {
+  border-color: #dedede;
+  background: #eeeeee;
+  color: #666666;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+/*
+ * Apariencia de campos de solo lectura,
+ * como periodo o fecha de registro.
+ */
+.form-card input[readonly] {
+  border-color: #dedede;
+  background: #eeeeee;
+  color: #666666;
+  cursor: default;
+  opacity: 1;
+}
+
+.preview-notice {
+  margin-bottom: 14px;
+  padding: 9px 12px;
+  border: 1px solid #d7b46a;
+  border-radius: 6px;
+  background: #fff8e7;
+  color: #75591f;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.preview-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.preview-card {
+  min-height: 150px;
+  padding: 16px;
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+  background: #ffffff;
+
+  h3 {
+    margin: 0 0 12px;
+    color: #65122e;
+    font-size: 14px;
+  }
+
+  p {
+    margin: 7px 0;
+    color: #444444;
+    font-size: 12px;
+  }
+}
+
+.comparison-message {
+  margin: 0;
+  padding: 12px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #555555;
+  font-size: 12px;
+  text-align: center;
+}
+
+.comparison-message.error {
+  border-color: #d93025;
+  background: #fdecec;
+  color: #9b1c1c;
+}
+
+/*
  * Distribución específica de las gráficas.
- * Les proporciona más espacio para mejorar
- * la lectura de las etiquetas.
  */
 .charts-grid {
+  display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
   margin-top: 12px;
@@ -285,8 +330,26 @@
   justify-self: center;
 }
 
-.form-card input:disabled {
-  background: #eeeeee;
-  color: #666666;
-  cursor: not-allowed;
+@media (max-width: 900px) {
+  .form-grid,
+  .preview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-card.compact {
+    max-width: none;
+  }
+
+  .section-header {
+    flex-direction: column;
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .charts-grid app-bar-chart:last-child {
+    grid-column: auto;
+    width: 100%;
+  }
 }
