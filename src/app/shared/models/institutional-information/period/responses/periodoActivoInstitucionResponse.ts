@@ -8,6 +8,8 @@ export interface PeriodoActivoInstitucionResponse {
 
   strPeriodo: string;
 
+  strDescripcionPeriodo: string;
+
   bitCapturaAbierta: boolean;
 
   dateFechaApertura: string | null;

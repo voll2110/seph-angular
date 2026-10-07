@@ -655,7 +655,19 @@ patentComparisonResults =
   periodoTexto(
     periodo: MapInstitucionPeriodoResponse
   ): string {
-    return `${periodo.strPeriodo} - ${periodo.intAnio}`;
+    return periodo.strDescripcionPeriodo;
+  }
+
+  /*
+   * Obtiene la descripción visible del periodo
+   * sin modificar la clave devuelta por el comparativo.
+   */
+  getComparisonPeriodDescription(
+    period: string | null
+  ): string | null {
+    return this.periodos().find(
+      assignment => assignment.strPeriodo === period
+    )?.strDescripcionPeriodo ?? period;
   }
 
   private showNotification(

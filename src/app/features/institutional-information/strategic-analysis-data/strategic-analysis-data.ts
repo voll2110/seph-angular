@@ -188,7 +188,7 @@ export class StrategicAnalysisDataComponent
             periodoActivo.idMapInstitucionPeriodo;
 
           this.periodo =
-            periodoActivo.strPeriodo;
+            periodoActivo.strDescripcionPeriodo;
 
           this.loadReporteAnalisisEstrategico();
 

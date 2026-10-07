@@ -216,7 +216,7 @@
       </span>
 
       <h4>
-        {{ result.periodoActual }}
+        {{ getComparisonPeriodDescription(result.periodoActual) }}
       </h4>
 
       <strong>
@@ -236,7 +236,7 @@
       </span>
 
       <h4>
-        {{ result.periodoAnterior }}
+        {{ getComparisonPeriodDescription(result.periodoAnterior) }}
       </h4>
 
       <strong>
@@ -315,9 +315,9 @@
 
         <p>
           Indicadores registrados en
-          {{ infrastructureComparisonResults()[0].periodoActual }}
+          {{ getComparisonPeriodDescription(infrastructureComparisonResults()[0].periodoActual) }}
           y
-          {{ infrastructureComparisonResults()[0].periodoAnterior }}.
+          {{ getComparisonPeriodDescription(infrastructureComparisonResults()[0].periodoAnterior) }}.
         </p>
       </div>
 
@@ -362,7 +362,7 @@
               <td data-label="Periodo base">
 
                 <span class="table-period">
-                  {{ result.periodoActual }}
+                  {{ getComparisonPeriodDescription(result.periodoActual) }}
                 </span>
 
                 <strong class="table-value">
@@ -374,7 +374,7 @@
               <td data-label="Periodo de comparación">
 
                 <span class="table-period">
-                  {{ result.periodoAnterior }}
+                  {{ getComparisonPeriodDescription(result.periodoAnterior) }}
                 </span>
 
                 <strong class="table-value">
@@ -452,9 +452,9 @@
 
         <p>
           Indicadores financieros registrados en
-          {{ financeComparisonResults()[0].periodoActual }}
+          {{ getComparisonPeriodDescription(financeComparisonResults()[0].periodoActual) }}
           y
-          {{ financeComparisonResults()[0].periodoAnterior }}.
+          {{ getComparisonPeriodDescription(financeComparisonResults()[0].periodoAnterior) }}.
         </p>
       </div>
 
@@ -492,7 +492,7 @@
               <td data-label="Periodo base">
 
                 <span class="table-period">
-                  {{ result.periodoActual }}
+                  {{ getComparisonPeriodDescription(result.periodoActual) }}
                 </span>
 
                 <strong class="table-value">
@@ -507,7 +507,7 @@
               <td data-label="Periodo de comparación">
 
                 <span class="table-period">
-                  {{ result.periodoAnterior }}
+                  {{ getComparisonPeriodDescription(result.periodoAnterior) }}
                 </span>
 
                 <strong class="table-value">
@@ -590,9 +590,9 @@
 
         <p>
           Indicadores registrados en
-          {{ vinculationComparisonResults()[0].periodoActual }}
+          {{ getComparisonPeriodDescription(vinculationComparisonResults()[0].periodoActual) }}
           y
-          {{ vinculationComparisonResults()[0].periodoAnterior }}.
+          {{ getComparisonPeriodDescription(vinculationComparisonResults()[0].periodoAnterior) }}.
         </p>
       </div>
 
@@ -630,7 +630,7 @@
               <td data-label="Periodo base">
 
                 <span class="table-period">
-                  {{ result.periodoActual }}
+                  {{ getComparisonPeriodDescription(result.periodoActual) }}
                 </span>
 
                 <strong class="table-value">
@@ -642,7 +642,7 @@
               <td data-label="Periodo de comparación">
 
                 <span class="table-period">
-                  {{ result.periodoAnterior }}
+                  {{ getComparisonPeriodDescription(result.periodoAnterior) }}
                 </span>
 
                 <strong class="table-value">
@@ -720,9 +720,9 @@
 
         <p>
           Registros correspondientes a
-          {{ patentComparisonResults()[0].periodoActual }}
+          {{ getComparisonPeriodDescription(patentComparisonResults()[0].periodoActual) }}
           y
-          {{ patentComparisonResults()[0].periodoAnterior }}.
+          {{ getComparisonPeriodDescription(patentComparisonResults()[0].periodoAnterior) }}.
         </p>
       </div>
 
@@ -760,7 +760,7 @@
               <td data-label="Periodo base">
 
                 <span class="table-period">
-                  {{ result.periodoActual }}
+                  {{ getComparisonPeriodDescription(result.periodoActual) }}
                 </span>
 
                 <strong class="table-value">
@@ -772,7 +772,7 @@
               <td data-label="Periodo de comparación">
 
                 <span class="table-period">
-                  {{ result.periodoAnterior }}
+                  {{ getComparisonPeriodDescription(result.periodoAnterior) }}
                 </span>
 
                 <strong class="table-value">

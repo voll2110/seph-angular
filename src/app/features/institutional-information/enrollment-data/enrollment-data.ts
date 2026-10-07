@@ -255,7 +255,7 @@ loadActivePeriod(): void {
           activePeriod.idMapInstitucionPeriodo;
 
         this.periodo =
-          activePeriod.strPeriodo;
+          activePeriod.strDescripcionPeriodo;
 
         this.loadReporteMatricula();
       },

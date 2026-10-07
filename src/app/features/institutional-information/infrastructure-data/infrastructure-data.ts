@@ -247,7 +247,7 @@ export class InfrastructureDataComponent implements OnInit {
             periodoActivo.idMapInstitucionPeriodo;
 
           this.periodo =
-            periodoActivo.strPeriodo;
+            periodoActivo.strDescripcionPeriodo;
 
           this.loadReporteInfraestructura();
 

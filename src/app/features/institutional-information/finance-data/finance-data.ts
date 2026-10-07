@@ -235,7 +235,7 @@ export class FinanceDataComponent implements OnInit {
             periodoActivo.idMapInstitucionPeriodo;
 
           this.periodo =
-            periodoActivo.strPeriodo;
+            periodoActivo.strDescripcionPeriodo;
 
           this.loadReporteFinanza();
 

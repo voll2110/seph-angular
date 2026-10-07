@@ -235,7 +235,7 @@ personalCompletedChange =
             periodoActivo.idMapInstitucionPeriodo;
 
           this.periodo =
-            periodoActivo.strPeriodo;
+            periodoActivo.strDescripcionPeriodo;
 
           this.loadReportePersonal();
         },
