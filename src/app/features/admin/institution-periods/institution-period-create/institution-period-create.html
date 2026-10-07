@@ -109,13 +109,13 @@
               Selecciona un periodo
             </option>
 
-           @for (
-  period of periods();
-  track period.id
-) {
-  <option [ngValue]="period.id">
-    {{ period.strNombre }} — {{ period.strTipoPeriodo }}
-  </option>
+        @for (
+        period of periods();
+      track period.id
+      ) {
+    <option [ngValue]="period.id">
+     {{ period.strDescripcion }} — {{ period.strTipoPeriodo }}
+      </option>
 }
 
           </select>
