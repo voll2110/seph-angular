@@ -475,7 +475,13 @@ private validateRequiredFields(): boolean {
 
     this.vinculationReport.totalConveniosActivos === null ||
 
-    this.vinculationReport.idMecanismoSeguimiento === null ||
+    (
+      this.vinculationReport.seguimientoEgresados &&
+      (
+        !Number.isInteger(this.vinculationReport.idMecanismoSeguimiento) ||
+        (this.vinculationReport.idMecanismoSeguimiento ?? 0) <= 0
+      )
+    ) ||
 
     this.vinculationReport.porcentajeLaborando === null ||
 
@@ -561,6 +567,22 @@ private validateVinculationData(): boolean {
   }
 
   if (!this.validateNegativeValues()) {
+    return false;
+  }
+
+  if (!Number.isInteger(this.vinculationReport.totalConveniosActivos)) {
+    this.validationError(
+      'El total de convenios activos debe ser un número entero.'
+    );
+
+    return false;
+  }
+
+  if (!Number.isFinite(this.vinculationReport.porcentajeLaborando)) {
+    this.validationError(
+      'El porcentaje de egresados laborando debe ser un número válido entre 0 y 100.'
+    );
+
     return false;
   }
 

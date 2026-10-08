@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 
 import { CatalogService } from '../../../../core/services/catalogs/catalog.service';
@@ -68,16 +69,19 @@ export class EnlaceCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.institutionsService.getInstitutions().subscribe({
-      next: (response) => this.instituciones.set(response.data ?? [])
+      next: (response) => this.instituciones.set(response.data ?? []),
+      error: () => this.showNotification('No fue posible cargar las instituciones. Intenta nuevamente.', 'error')
     });
     this.catalogService.getPerfilesAcademicos().subscribe({
       next: (response) => {
         this.perfilesAcademicos.set(response.data ?? []);
         this.aplicarPerfilesPendientes();
-      }
+      },
+      error: () => this.showNotification('No fue posible cargar los perfiles académicos. Intenta nuevamente.', 'error')
     });
     this.catalogService.getNivelesAcademicos().subscribe({
-      next: (response) => this.nivelesAcademicos.set(response.data ?? [])
+      next: (response) => this.nivelesAcademicos.set(response.data ?? []),
+      error: () => this.showNotification('No fue posible cargar los niveles académicos. Intenta nuevamente.', 'error')
     });
 
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -214,6 +218,7 @@ export class EnlaceCreateComponent implements OnInit {
   }
 
   registrar(): void {
+    if (this.isSaving()) return;
     if (!this.validateForm()) return;
 
     this.isSaving.set(true);
@@ -281,6 +286,13 @@ export class EnlaceCreateComponent implements OnInit {
           this.isSaving.set(false);
         }
       });
+    }).catch((error: unknown) => {
+      const message = error instanceof HttpErrorResponse && typeof error.error?.message === 'string'
+        ? error.error.message
+        : 'No fue posible subir los archivos. Intenta nuevamente.';
+
+      this.showNotification(message, 'error');
+      this.isSaving.set(false);
     });
   }
 
@@ -305,9 +317,38 @@ export class EnlaceCreateComponent implements OnInit {
       this.showNotification('El nombre es obligatorio.', 'error');
       return false;
     }
+    if (this.fullName.length > 256) {
+      this.showNotification('El nombre no debe superar 256 caracteres.', 'error');
+      return false;
+    }
     if (!this.enlaceId && (!this.email.trim() || !this.password.trim())) {
       this.showNotification('Correo y contraseña son obligatorios.', 'error');
       return false;
+    }
+    if (!this.enlaceId) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
+        this.showNotification('Ingresa un correo electrónico válido, sin espacios.', 'error');
+        return false;
+      }
+
+      if (this.password.length < 12) {
+        this.showNotification('La contraseña debe tener al menos 12 caracteres.', 'error');
+        return false;
+      }
+
+      const passwordRules: Array<[RegExp, string]> = [
+        [/[A-Z]/, 'La contraseña debe contener al menos una mayúscula.'],
+        [/[a-z]/, 'La contraseña debe contener al menos una minúscula.'],
+        [/[0-9]/, 'La contraseña debe contener al menos un número.'],
+        [/[^a-zA-Z0-9]/, 'La contraseña debe contener al menos un carácter especial.']
+      ];
+
+      for (const [pattern, message] of passwordRules) {
+        if (!pattern.test(this.password)) {
+          this.showNotification(message, 'error');
+          return false;
+        }
+      }
     }
     if (!this.idInstitucion) {
       this.showNotification('Debe seleccionar la institución.', 'error');

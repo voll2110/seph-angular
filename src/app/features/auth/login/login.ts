@@ -19,10 +19,30 @@ export class LoginComponent {
   error = signal<string | null>(null);
 
   login() {
-    this.loading.set(true);
+    if (this.loading()) return;
+
     this.error.set(null);
 
-    this.authService.login(this.form).subscribe({
+    const email = this.form.email.trim();
+
+    if (!email) {
+      this.error.set('El correo electrónico es obligatorio.');
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      this.error.set('Ingresa un correo electrónico válido.');
+      return;
+    }
+
+    if (!this.form.password.trim()) {
+      this.error.set('La contraseña es obligatoria.');
+      return;
+    }
+
+    this.loading.set(true);
+
+    this.authService.login({ ...this.form, email }).subscribe({
       next: (response) => {
         if (response.data) {
           this.authService.saveSession(response.data);

@@ -402,6 +402,51 @@ saveEnrollmentData(
     return;
   }
 
+  const enrollmentCounts = [
+    this.matriculaTotal,
+    this.matriculaHombres,
+    this.matriculaMujeres,
+    this.matriculaTsu,
+    this.matriculaLicenciatura,
+    this.matriculaPostgrado
+  ];
+
+  if (enrollmentCounts.some(value => !Number.isInteger(value) || value < 0)) {
+    this.showSaveMessage(
+      'Las cantidades de matrícula deben ser números enteros mayores o iguales a cero.',
+      'error'
+    );
+
+    onFinish?.();
+    return;
+  }
+
+  if (this.matriculaTotal <= 0) {
+    this.showSaveMessage(
+      'La matrícula total debe ser mayor que cero.',
+      'error'
+    );
+
+    onFinish?.();
+    return;
+  }
+
+  const enrollmentRates = [
+    this.tasaDesercion,
+    this.tasaReprobacion,
+    this.tasaEficienciaTerminal
+  ];
+
+  if (enrollmentRates.some(value => !Number.isFinite(value) || value < 0 || value > 100)) {
+    this.showSaveMessage(
+      'Las tasas de deserción, reprobación y eficiencia terminal deben estar entre 0 y 100.',
+      'error'
+    );
+
+    onFinish?.();
+    return;
+  }
+
   if (
     this.matriculaHombres + this.matriculaMujeres !==
     this.matriculaTotal

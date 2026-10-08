@@ -524,6 +524,14 @@ private loadReporteInfraestructura(): void {
 
     }
 
+    if (valores.some(value => value !== null && !Number.isInteger(value))) {
+      this.validationError(
+        'Las cantidades de infraestructura deben ser números enteros.'
+      );
+
+      return false;
+    }
+
     return true;
 
   }
@@ -539,6 +547,28 @@ private loadReporteInfraestructura(): void {
     }
 
     if (!this.validateNegativeValues()) {
+      return false;
+    }
+
+    if (
+      this.infrastructureReport.biblioteca &&
+      (this.infrastructureReport.totalBibliotecas ?? 0) <= 0
+    ) {
+      this.validationError(
+        'Debe registrar al menos una biblioteca cuando indique que la institución cuenta con biblioteca.'
+      );
+
+      return false;
+    }
+
+    if (
+      !this.infrastructureReport.biblioteca &&
+      (this.infrastructureReport.totalBibliotecas ?? 0) !== 0
+    ) {
+      this.validationError(
+        'El total de bibliotecas debe ser cero cuando la institución no cuenta con biblioteca.'
+      );
+
       return false;
     }
 

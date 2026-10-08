@@ -398,6 +398,12 @@ private validateRequiredFields(): boolean {
     );
   }
 
+  if (this.personalReport.totalGeneral <= 0) {
+    return this.validationError(
+      'El total general del personal debe ser mayor que cero.'
+    );
+  }
+
   if (this.personalReport.totalDirectivos === null) {
     return this.validationError(
       'Captura el total de directivos.'
@@ -460,6 +466,12 @@ private validateNegativeValues(): boolean {
   if (hasNegativeValue) {
     return this.validationError(
       'Los valores del personal no pueden ser negativos.'
+    );
+  }
+
+  if (numericFields.some(value => value !== null && !Number.isInteger(value))) {
+    return this.validationError(
+      'Las cantidades de personal deben ser números enteros.'
     );
   }
 
